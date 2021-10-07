@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
-import LoginDialog from "../../components/loginDialog/LoginDialog";
+import Map from "../../components/map/Map";
+import RadiusSelect from "../../components/radiusSelect/RadiusSelect";
 
 export default function Main() {
   const { roomId } = useParams();
   return (
     <>
-      <h1>Convene</h1>
-      <LoginDialog />
-      <h1>we are {roomId} now</h1>
+      <Map />
+      <RadiusSelect />
     </>
   );
 }

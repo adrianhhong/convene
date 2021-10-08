@@ -1,22 +1,13 @@
-import { useState } from "react";
 import { Select } from "antd";
 import "./RadiusSelect.less";
 
-export default function RadiusSelect() {
+export default function RadiusSelect({ radius, radiusList, onRadiusChange }) {
   const { Option } = Select;
-  const radiusList = ["5", "10", "15", "20", "25"];
-  const [radius, setRadius] = useState(radiusList[0]);
 
   return (
     <>
       <div className="radius">
-        <Select
-          style={{ width: 75 }}
-          onChange={(value) => {
-            setRadius(value);
-          }}
-          value={radius}
-        >
+        <Select style={{ width: 75 }} onChange={onRadiusChange} value={radius}>
           <Option value={radiusList[0]} key={radiusList[0]}>
             {radiusList[0]}
           </Option>

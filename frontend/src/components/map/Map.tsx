@@ -10,7 +10,26 @@ import ReactMapGL, {
 import Geocoder from "react-mapbox-gl-geocoder";
 import * as turf from "@turf/turf";
 
-export default function Map({ radius }) {
+type TempMarker = {
+  name: string;
+  longitude: number;
+  latitude: number;
+};
+
+type LayerType =
+  | "fill"
+  | "line"
+  | "symbol"
+  | "circle"
+  | "fill-extrusion"
+  | "raster"
+  | "background"
+  | "heatmap"
+  | "hillshade"
+  | "sky"
+  | "custom";
+
+export default function Map({ radius }: { radius: number }) {
   const [viewport, setViewport] = useState({
     latitude: -38,
     longitude: 145,
@@ -19,7 +38,7 @@ export default function Map({ radius }) {
 
   const circleFillStyle = {
     id: "circle-fill",
-    type: "fill",
+    type: "fill" as LayerType,
     paint: {
       "fill-color": "black",
       "fill-opacity": 0.05,
@@ -28,7 +47,7 @@ export default function Map({ radius }) {
 
   const circleOutlineStyle = {
     id: "circle-outline",
-    type: "line",
+    type: "line" as LayerType,
     paint: {
       "line-color": "blue",
       "line-opacity": 0.1,
@@ -39,7 +58,7 @@ export default function Map({ radius }) {
   const center = [145, -38];
   const options = {
     steps: 999,
-    units: "kilometers",
+    units: "kilometers" as turf.Units,
   };
   const circle = turf.circle(center, radius, options);
 
@@ -47,16 +66,19 @@ export default function Map({ radius }) {
     country: "au",
   };
 
-  const onSelected = (viewport, item) => {
+  const [tempMarker, setTempMarker] = useState<TempMarker | null>(null);
+
+  const onSelected = (viewport: any, item: any) => {
     setViewport(viewport);
+    setTempMarker({
+      name: item.place_name,
+      longitude: item.center[0],
+      latitude: item.center[1],
+    });
   };
 
   return (
     <>
-      {/* <div className="sidebar">
-        Longitude: {viewport.longitude} | Latitude: {viewport.latitude} | Zoom:
-        {viewport.zoom} | Radius: {radius}
-      </div> */}
       <Geocoder
         className="geocoder"
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
@@ -71,10 +93,20 @@ export default function Map({ radius }) {
         mapStyle="mapbox://styles/mapbox/streets-v11"
         width="100vw"
         height="100vh"
-        onViewportChange={(nextViewport) => setViewport(nextViewport)}
+        onViewportChange={(nextViewport: any) => setViewport(nextViewport)}
       >
         <GeolocateControl className="geolocate" />
         <NavigationControl className="nav-control" />
+        {tempMarker && (
+          <Marker
+            longitude={tempMarker.longitude}
+            latitude={tempMarker.latitude}
+          >
+            <div className="marker temporary-marker">
+              <span></span>
+            </div>
+          </Marker>
+        )}
         <Marker latitude={-38} longitude={145}>
           <div className="marker temporary-marker">
             <span></span>

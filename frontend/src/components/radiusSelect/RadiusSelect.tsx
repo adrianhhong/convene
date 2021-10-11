@@ -1,7 +1,17 @@
 import { Select } from "antd";
 import "./RadiusSelect.less";
 
-export default function RadiusSelect({ radius, radiusList, onRadiusChange }) {
+type RadiusSelectProps = {
+  radius: number;
+  radiusList: number[];
+  onRadiusChange: (value: number) => void;
+};
+
+export default function RadiusSelect({
+  radius,
+  radiusList,
+  onRadiusChange,
+}: RadiusSelectProps) {
   const { Option } = Select;
 
   return (

@@ -8,23 +8,23 @@ import RadiusSelect from "../../components/radiusSelect/RadiusSelect";
 // } from "../../components/customPopup/CustomMarker";
 
 export default function Main() {
-  const { roomId } = useParams();
-  const radiusList = ["5", "10", "15", "20", "25"];
-  const [radius, setRadius] = useState(radiusList[0]);
+  const { roomId }: { roomId: string } = useParams();
+  const radiusList = [5, 10, 15, 20, 25];
+  const [radius, setRadius] = useState<number>(radiusList[0]);
 
-  const handleRadiusChange = (value) => {
+  const handleRadiusChange = (value: number) => {
     setRadius(value);
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  // const [selectedIndex, setSelectedIndex] = useState(null);
 
-  const handleOpenPopup = (index) => {
-    setSelectedIndex(index);
-  };
+  // const handleOpenPopup = (index) => {
+  //   setSelectedIndex(index);
+  // };
 
-  const handleClosePopup = () => {
-    setSelectedIndex(null);
-  };
+  // const handleClosePopup = () => {
+  //   setSelectedIndex(null);
+  // };
 
   return (
     <>

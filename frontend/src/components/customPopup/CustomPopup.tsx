@@ -1,6 +1,13 @@
 import { Marker, Popup } from "react-map-gl";
 
-export function CustomPopup({ index, marker, closePopup }) {
+export function CustomPopup({ index, marker, closePopup }: {
+  index: number;
+  marker: {
+    longitude: number;
+    latitude: number;
+  };
+  closePopup: 
+  ) {
   return (
     <Popup
       latitude={marker.latitude}
@@ -15,7 +22,18 @@ export function CustomPopup({ index, marker, closePopup }) {
   );
 }
 
-export function CustomMarker({ index, marker, openPopup }) {
+export function CustomMarker({
+  index,
+  marker,
+  openPopup,
+}: {
+  index: number;
+  marker: {
+    longitude: number;
+    latitude: number;
+  };
+  openPopup: (index: number) => void;
+}) {
   return (
     <Marker longitude={marker.longitude} latitude={marker.latitude}>
       <div className="marker" onClick={() => openPopup(index)}>

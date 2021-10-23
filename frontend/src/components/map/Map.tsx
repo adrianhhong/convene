@@ -9,6 +9,7 @@ import ReactMapGL, {
 } from "react-map-gl";
 import Geocoder from "react-mapbox-gl-geocoder";
 import * as turf from "@turf/turf";
+import { Button } from "antd";
 
 type TempMarker = {
   name: string;
@@ -29,44 +30,45 @@ type LayerType =
   | "sky"
   | "custom";
 
+const circleFillStyle = {
+  id: "circle-fill",
+  type: "fill" as LayerType,
+  paint: {
+    "fill-color": "black",
+    "fill-opacity": 0.05,
+  },
+};
+
+const circleOutlineStyle = {
+  id: "circle-outline",
+  type: "line" as LayerType,
+  paint: {
+    "line-color": "blue",
+    "line-opacity": 0.1,
+    "line-width": 3,
+  },
+};
+
+const params = {
+  country: "au",
+};
+
+const center = [145, -38];
+const options = {
+  steps: 999,
+  units: "kilometers" as turf.Units,
+};
+
 export default function Map({ radius }: { radius: number }) {
   const [viewport, setViewport] = useState({
     latitude: -38,
     longitude: 145,
     zoom: 9,
   });
-
-  const circleFillStyle = {
-    id: "circle-fill",
-    type: "fill" as LayerType,
-    paint: {
-      "fill-color": "black",
-      "fill-opacity": 0.05,
-    },
-  };
-
-  const circleOutlineStyle = {
-    id: "circle-outline",
-    type: "line" as LayerType,
-    paint: {
-      "line-color": "blue",
-      "line-opacity": 0.1,
-      "line-width": 3,
-    },
-  };
-
-  const center = [145, -38];
-  const options = {
-    steps: 999,
-    units: "kilometers" as turf.Units,
-  };
-  const circle = turf.circle(center, radius, options);
-
-  const params = {
-    country: "au",
-  };
-
+  const [markers, setMarkers] = useState<(TempMarker | null)[]>([]);
   const [tempMarker, setTempMarker] = useState<TempMarker | null>(null);
+
+  const circle = turf.circle(center, radius, options);
 
   const onSelected = (viewport: any, item: any) => {
     setViewport(viewport);
@@ -77,8 +79,16 @@ export default function Map({ radius }: { radius: number }) {
     });
   };
 
+  const add = () => {
+    setMarkers([...markers, tempMarker]);
+    setTempMarker(null);
+  };
+
   return (
     <>
+      <Button color="primary" onClick={add}>
+        Add
+      </Button>
       <Geocoder
         className="geocoder"
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
